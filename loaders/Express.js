@@ -6,7 +6,6 @@ const compression = require("compression");
 const routes = require("../routes");
 const logger = require("../services/Logger");
 const config = require("../config");
-const router = require("../routes/routes-templates");
 
 class ExpressLoader {
   constructor() {
@@ -28,7 +27,7 @@ class ExpressLoader {
     app.use(bodyParser.json({ limit: "20mb" }));
 
     //pass app to routes
-    routes(app);
+    app.use(config.api.prefix, routes());
 
     // start application
     this.server = app.listen(config.port, () => {

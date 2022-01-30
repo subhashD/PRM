@@ -1,8 +1,10 @@
 const config = require('../config');
-const routesTemplates = require('./routes-templates');
+const router = require('express').Router();
+const templates = require('./routes-templates');
+const user = require('./user');
 
-let routes = ( app ) => {
-    app.use( (req, res, next) => {
+let routes = () => {
+    router.use( (req, res, next) => {
         res.setHeader( 'Access-Control-Allow-Origin', '*' );
         res.setHeader( 'Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE' );
         res.setHeader( 'Access-Control-Allow-Headers', 'X-Requested-With,content-type, x-access-token, authorization' );
@@ -11,7 +13,10 @@ let routes = ( app ) => {
         next(); 
     });
 
-    app.use('/', routesTemplates);
+    router.use("/", templates);
+    router.use("/user", user);
+
+    return router;
 };
 
 
