@@ -6,6 +6,8 @@ const compression = require("compression");
 const routes = require("../routes");
 const logger = require("../services/Logger");
 const config = require("../config");
+const middlewares = require("../middlewares/index");
+// const auth = require('../middlewares/auth');
 
 class ExpressLoader {
   constructor() {
@@ -25,7 +27,10 @@ class ExpressLoader {
       })
     );
     app.use(bodyParser.json({ limit: "20mb" }));
-
+    
+    //pass app to middlewares
+    middlewares(app);
+    
     //pass app to routes
     app.use(config.api.prefix, routes());
 

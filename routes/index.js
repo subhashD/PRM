@@ -2,6 +2,8 @@ const config = require('../config');
 const router = require('express').Router();
 const templates = require('./routes-templates');
 const user = require('./user');
+const authRoutes = require('./authRoute');
+const authMiddleware = require('../middlewares/auth');
 
 let routes = () => {
     router.use( (req, res, next) => {
@@ -13,8 +15,8 @@ let routes = () => {
         next(); 
     });
 
-    router.use("/", templates);
-    router.use("/user", user);
+    router.use("/auth", authRoutes);
+    router.use("/user", authMiddleware.authenticate(), user);
 
     return router;
 };

@@ -3,7 +3,7 @@ function sendError( body ) {
 }
 
 function sendSuccess( body ) {
-    return { success: false, data: body };
+    return { success: true, data: body };
 }
 
 module.exports = { sendError, sendSuccess };
