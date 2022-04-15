@@ -1,9 +1,12 @@
 const config = require('../config');
 const router = require('express').Router();
 const templates = require('./routes-templates');
+const authMiddleware = require('../middlewares/auth');
+const addUserDataMiddleware = require('../middlewares/addUserData');
 const user = require('./user');
 const authRoutes = require('./authRoute');
-const authMiddleware = require('../middlewares/auth');
+const contactRoutes = require('./contactRoute');
+const genderRoutes = require('./genderRoute');
 
 let routes = () => {
     router.use( (req, res, next) => {
@@ -16,7 +19,9 @@ let routes = () => {
     });
 
     router.use("/auth", authRoutes);
-    router.use("/user", authMiddleware.authenticate(), user);
+    router.use("/user", [authMiddleware.authenticate(), addUserDataMiddleware], user);
+    router.use("/contact", [authMiddleware.authenticate(), addUserDataMiddleware], contactRoutes);
+    router.use("/gender", [authMiddleware.authenticate(), addUserDataMiddleware], genderRoutes);
 
     return router;
 };

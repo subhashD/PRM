@@ -20,7 +20,7 @@ const config = {
         directory : process.env.LOGDIR || 'logs',
     },
     
-    viewEngine : process.env.VIEW_ENGINE || 'html',
+    viewEngine : process.env.VIEW_ENGINE || 'json',
     
     /**
      * That long string from mlab

@@ -97,6 +97,15 @@ class AuthService {
     }
   }
 
+  findUserByEmail = async ( email ) => {
+    const user = await this.MongooseServiceInstance.findOne({email : email});
+    if(user == null) {
+        return { status: false, message: "User not found!!"};
+    } else {
+        return { status: true, message: "User found!!", user: user};
+    }
+  }
+
   tokenRefresh = async ( body ) => {
     try {
         const decoded = jwt.verify(body.refreshToken, config.refreshTokenSecret);

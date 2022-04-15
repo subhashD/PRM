@@ -1,6 +1,8 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const morgan = require("morgan");
+const cors = require('cors');
+const helmet = require('helmet');
 const path = require("path");
 const compression = require("compression");
 const routes = require("../routes");
@@ -13,20 +15,32 @@ class ExpressLoader {
   constructor() {
     const app = express();
 
-    //Setup error handling
-
-    // Serve static content
-    app.use(express.static(path.join(__dirname, "uploads")));
-
-    app.use(morgan("dev"));
-    app.use(compression());
+    // adding Helmet to enhance your API's security
+    app.use(helmet());
+    
+    // using bodyParser to parse JSON bodies into JS objects
     app.use(
       bodyParser.urlencoded({
         extended: false,
         limit: "20mb",
       })
     );
+
     app.use(bodyParser.json({ limit: "20mb" }));
+
+    // enabling CORS for all requests
+    app.use(cors());
+      
+    // adding morgan to log HTTP requests
+    app.use(morgan(config.env));
+
+    app.use(compression());
+
+    //Setup error handling
+
+    // Serve static content
+    app.use(express.static(path.join(__dirname, "uploads")));
+    
     
     //pass app to middlewares
     middlewares(app);
