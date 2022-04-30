@@ -1,7 +1,6 @@
 // services/AuthService.js
 const config = require('../config/index')
-const MongooseService = require( "./MongooseService" ); // Data Access Layer
-const UserModel = require( "../models/user" ); // Database Model
+const UserRepository = require( "../repositories/UserRepository" ); // Database Layer
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -10,8 +9,8 @@ class AuthService {
    * @description Create an instance of AuthService
    */
   constructor () {
-    // Create instance of Data Access layer using our desired model
-    this.MongooseServiceInstance = new MongooseService( UserModel );
+    // Create instance of Data Access layer using req
+    this.repositoryInstance = new UserRepository();
   }
 
   isPasswordValid = async ( user, password ) => {
@@ -23,11 +22,11 @@ class AuthService {
     const payload = {
         email: user.email
     };
-    
+
     //create the access token with the shorter lifespan
     let accessToken = jwt.sign(payload, config.accessTokenSecret, {
-        algorithm: config.jwtAlgorithm,
-        expiresIn: config.accessTokenLife
+        algorithm: App.config.jwtAlgorithm,
+        expiresIn: App.config.accessTokenLife
     });
 
     return accessToken;
@@ -63,17 +62,18 @@ class AuthService {
             password: body.password 
         };
 
-        const result = await this.MongooseServiceInstance.create( userToCreate );
-        return { success: true, body: result };
+        const result = await this.repositoryInstance.create( userToCreate );
+        return { success: true, message: 'User Created Successfully!', data: result };
     } catch ( err ) {
-        return { success: false, error: err };
+        return { success: false, message: 'User Creation Failed!', data: err };
     }
   }
 
   login = async ( body ) => {
-    const user = await this.MongooseServiceInstance.findOne({email : body.email});
+    const user = await this.repositoryInstance.findOne({email : body.email});
+    console.log(user);
     if(user == null) {
-        return { status: false, message: "User not found!!"};
+        return { status: false, message: "User not found!!", data: null};
     } else {
         // check if password matches
         const validPassword = await this.isPasswordValid(user, body.password);
@@ -84,40 +84,42 @@ class AuthService {
             };
         }
 
-        let tokens = {};
+        let data = {};
 
-        tokens.accessToken = await this.generateAccessToken(user);
-        tokens.refreshToken = await this.generateRefreshToken(user);
+        data.user = user;
+        data.accessToken = await this.generateAccessToken(user);
+        data.refreshToken = await this.generateRefreshToken(user);
         
         return {
             success: true,
             message: 'Tokens generated successfully!!',
-            tokens: tokens
+            data: data
         };    
     }
   }
 
   findUserByEmail = async ( email ) => {
-    const user = await this.MongooseServiceInstance.findOne({email : email});
+    const user = await this.repositoryInstance.findOne({email : email});
     if(user == null) {
-        return { status: false, message: "User not found!!"};
+        return { status: false, message: "User not found!!", data: null};
     } else {
-        return { status: true, message: "User found!!", user: user};
+        return { status: true, message: "User found!!", data: user};
     }
   }
 
   tokenRefresh = async ( body ) => {
+    let decoded = null;
     try {
-        const decoded = jwt.verify(body.refreshToken, config.refreshTokenSecret);
+        decoded = jwt.verify(body.refreshToken, config.refreshTokenSecret);
     } catch ( err ) {
         if(err.name == 'TokenExpiredError') {
-            return { status: false, message: "Refresh Token Expired!!"};
+            return { status: false, message: "Refresh Token Expired!!", data: err.message};
         }
     }
 
-    const user = await this.MongooseServiceInstance.findOne({email : decoded.email});
+    const user = await this.repositoryInstance.findOne({email : decoded.email});
     if(user == null) {
-        return { status: false, message: "User not found!!"};
+        return { status: false, message: "User not found!!", data: null};
     } else {
         let tokens = {};
 
@@ -127,7 +129,7 @@ class AuthService {
         return {
             success: true,
             message: 'Token Refreshed successfully!!',
-            tokens: tokens
+            data: tokens
         };    
     }
   }

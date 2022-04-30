@@ -10,14 +10,14 @@ const config = {
     /**
      * Application Environment
      */
-    env    : process.env.NODE_ENV || 'development',
+    env    : process.env.ENV || 'development',
     
     /**
      * Used by winston logger
      */
     logs: {
         level: process.env.LOG_LEVEL || 'silly',
-        directory : process.env.LOGDIR || 'logs',
+        directory : process.env.LOGDIR || 'storage/logs',
     },
     
     viewEngine : process.env.VIEW_ENGINE || 'json',

@@ -1,17 +1,13 @@
-// services/AuthService.js
-const config = require('../config/index')
-const GenderModel = require( "../models/gender" ); // Database Model
-const contactModel = require( "../models/contact" ); // Database Model
-const GenderSeeder = require('../util/seeders/seeds/GenderSeeder');
+const GenderRepository = require( "../repositories/GenderRepository" ); // Gender Repo Layer
+const GenderSeeder = require('../database/seeders/seeds/GenderSeeder');
 
 class GenderService {
   /**
    * @description Create an instance of MongooseService
    */
   constructor () {
-    // Create instance of Data Access layer using our desired model
-    this.model = GenderModel;
-    // this.MongooseServiceInstance = new MongooseService( ContactModel );
+    // Create instance of Data Access layer
+    this.repositoryInstance = new GenderRepository();
   }
 
   /**
@@ -23,20 +19,20 @@ class GenderService {
    getAll = async ( body ) => {
     try {  
         const filter = {};
-        const result = await this.model.find( filter );
-        return { success: true, body: result };
+        const result = await this.repositoryInstance.find( filter );
+        return { success: true, message:'Gender loaded successfully!', data: result };
     } catch ( err ) {
         console.log(err);
-        return { success: false, error: err };
+        return { success: false, message: err.name, data: {errors: err.message} };
     }
   }
    
   getById = async ( id ) => {
     try {  
-        const result = await this.model.findById( id );
-        return { success: true, body: result };
+        const result = await this.repositoryInstance.findById( id );
+        return { success: true, message:'Gender loaded successfully!', data: result };
     } catch ( err ) {
-        return { success: false, error: err };
+        return { success: false, message:'Gender loading failed!', data: {errors: err.message}};
     }
   }
   
@@ -44,9 +40,9 @@ class GenderService {
     try {  
         const GenderSeederInstance = new GenderSeeder();
         const result = await GenderSeederInstance.seedDB();
-        return { success: true, body: result };
+        return { success: true, message:'Seeding successfull!', body: result };
     } catch ( err ) {
-        return { success: false, error: err };
+        return { success: false, message:'Seeding failed!', data: {errors: err.message}};
     }
   }
 }

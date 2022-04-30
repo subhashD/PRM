@@ -1,29 +1,54 @@
+const ApplicationError = require('../util/errors/ApplicationError');
 const AuthService = require('../services/AuthService');
 const AuthServiceInstance = new AuthService();
+const UserTransformer = require('../transformers/User/UserTransformer');
 
-login = async (req, res) => {
-    const loggedInUser = await AuthServiceInstance.login( req.body );
-    return res.send( loggedInUser );
-}
+module.exports = {
 
-register = async ( req, res ) => {
-    try {
-        // We only pass the body object, never the req object
-        const createdUser = await AuthServiceInstance.create( req.body );
-        return res.send( createdUser );
-    } catch ( err ) {
-        res.status( 500 ).send( err );
+    login: async (req, res) => {
+        const response = await AuthServiceInstance.login( req.body );
+        
+        if(response.success) {
+            // let transformedData = await App.helpers.transformer(req, response.data, UserTransformer);
+            const transformedData = await (new UserTransformer()).getTransformedData(req, response.data);
+
+            return res.success(transformedData, response.message);
+        }
+        return res.error( response.data, response.message );
+    },
+
+    register: async ( req, res ) => {
+        try {
+            // We only pass the body object, never the req object
+            const response = await AuthServiceInstance.create( req.body );
+            if(response.success) {
+                // let transformedData = await App.helpers.transformer(req, response.data, UserTransformer);
+                const transformedData = await (new UserTransformer()).getTransformedData(req, response.data);
+    
+                return res.success(transformedData, response.message);
+            }
+            return res.error( response.data, response.message );
+        } catch ( err ) {
+            res.error( err, null, 500 );
+        }
+    },
+
+    tokenRefresh: async ( req, res ) => {
+        try {
+            // We only pass the body object, never the req object
+            const response = await AuthServiceInstance.tokenRefresh( req.body );
+            if(response.success) {
+                // let transformedData = await App.helpers.transformer(req, response.data, UserTransformer);
+                const transformedData = await (new UserTransformer()).getTransformedData(req, response.data);
+    
+                return res.success(transformedData, response.message);
+            }
+            return res.error( response.data, response.message );
+        } catch ( err ) {
+            const data = {};
+            data.errors = err.message;
+            res.error( data, null, 500 );
+        }
     }
-}
 
-tokenRefresh = async ( req, res ) => {
-    try {
-        // We only pass the body object, never the req object
-        const tokenRefreshed = await AuthServiceInstance.tokenRefresh( req.body );
-        return res.send( tokenRefreshed );
-    } catch ( err ) {
-        res.status( 500 ).send( err );
-    }
 }
-
-module.exports = {login, register, tokenRefresh};

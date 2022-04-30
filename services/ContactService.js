@@ -1,18 +1,25 @@
 // services/AuthService.js
-const config = require('../config/index')
-const MongooseService = require( "./MongooseService" ); // Data Access Layer
-const ContactModel = require( "../models/contact" ); // Database Model
-const GenderService = require('../services/GenderService');
-const DateHelper = require('../util/helpers/DateHelper');
+const ContactRepository = require( "../repositories/ContactRepository" ); // Contact Repo Layer
+const GenderRepository = require( "../repositories/GenderRepository" ); // Gender Repo Layer
+const ApplicationError = require("../util/errors/ApplicationError");
 
 class ContactService {
   /**
    * @description Create an instance of MongooseService
    */
   constructor () {
-    // Create instance of Data Access layer using our desired model
-    this.model = ContactModel;
-    // this.MongooseServiceInstance = new MongooseService( ContactModel );
+    // Create instance of Data Access layer
+    this.repositoryInstance = new ContactRepository();
+  }
+
+  /**
+   * @description Returns the gender Id and Title
+   * @param {*} id 
+   * @returns {Promise}
+   */
+  getGender = (id) => {
+    const genderRepository = new GenderRepository();
+    return genderRepository.findById(id, { _id: 1, title: 1 });
   }
 
   /**
@@ -30,7 +37,7 @@ class ContactService {
             lastname: body.lastname, 
             nickname: body.nickname, 
             description: body.description, 
-            birthdate: DateHelper.format(body.birthdate),
+            birthdate: App.helpers.changeDateFormat(body.birthdate),
             first_met_additional_info: body.first_met_additional_info,
             last_consulted_at: body.last_consulted_at,
             vcard: body.vcard,
@@ -39,21 +46,45 @@ class ContactService {
         };
 
         if(body.gender) {
-          const genderObj = new GenderService();
-          const genderResponse = await genderObj.getById(body.gender);
-          if(genderResponse.success) {
-            contactToCreate.gender = genderResponse.body._id;
-            contactToCreate.genderTitle = genderResponse.body.title;
+          const genderResponse = await this.getGender(body.gender);
+          if(genderResponse) {
+            contactToCreate.gender = genderResponse._id;
+            contactToCreate.genderTitle = genderResponse.title;
           }
         }
 
-        console.log(contactToCreate);
-
-        const result = await this.model.create( contactToCreate );
+        const result = await this.repositoryInstance.create( contactToCreate );
         // const result = true;
-        return { success: true, body: result };
+        return { success: true, message:'Contact created successfully!'};
     } catch ( err ) {
-        return { success: false, error: err };
+        console.log(err);
+        return { success: false, message:'Contact creation failed!', data: {errors: err.message} };
+    }
+  }
+
+  /**
+   * @description Attempt to create a contact with the provided object
+   * @param body {object} Object containing all body fields to
+   * create contact
+   * @returns {Promise<{success: boolean, message: *, error: *}|{success: boolean, message: *, body: *}>}
+   */
+   getAll = async ( body ) => {
+    try {  
+        const filter = {};
+        const result = await this.repositoryInstance.find( filter );
+        return { success: true, message:'Contacts loaded successfully!', data: result };
+    } catch ( err ) {
+        console.log(err);
+        return { success: false, message: err.name, data: {errors: err.message} };
+    }
+  }
+   
+  getById = async ( id ) => {
+    try {  
+        const result = await this.repositoryInstance.findById( id );
+        return { success: true, message:'Contact loaded successfully!', data: result };
+    } catch ( err ) {
+        return { success: false, message:'Contact loading failed!', data: {errors: err.message}};
     }
   }
 }

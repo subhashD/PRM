@@ -1,6 +1,6 @@
 const config = require("./config");
 const mongoose = require('mongoose');
-const logger = require('./services/Logger');
+const logger = require('./util/Logger/Logger');
 
 const mongooseOptions = {
     useNewUrlParser : true,
@@ -12,8 +12,6 @@ mongoose.Promise = global.Promise;
 // connect to the db and initialize the app is successfull
 mongoose.connect(config.dbUrl, mongooseOptions)
     .then( () => {
-        logger.info("Database connection successful!");
-
         //create express instance to setup API
         const ExpressLoader = require('./loaders/Express');
         new ExpressLoader();

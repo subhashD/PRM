@@ -1,14 +1,17 @@
-const config = require('../config');
-const router = require('express').Router();
-const express = require("express");
-const app = express();
-const auth = require('./auth');
-const passport = require("passport");
-const User = require("../models/user");
+const configurator = require('./configurator');
 
 let middlewares = (app) => {
-    app.use(auth.initialize());
-    
+   
+    /**
+     * Common Middlewares.
+     */
+    configurator.general(app);
+    configurator.requestInterceptor(app);
+    configurator.responses(app);
+
+    // For adding user info in the global req object per session
+    configurator.auth.userLogin(app);
+
     return app;
 };
 
