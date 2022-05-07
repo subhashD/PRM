@@ -72,6 +72,11 @@ class Helper {
         return App.moment(date).format(format);
     }
 
+    static isDateValid(date, format = 'DD/MM/YYYY') {
+        console.log('in helpers : ' + App.moment(date, fromFormat).isValid());
+        return App.moment(date, fromFormat).isValid();
+    }
+    
     static changeDateFormat = (datetime = null, fromFormat = "DD/MM/YYYY", toFormat = "YYYY-MM-DD") => {
         if(datetime == null) {
             return App.moment().format(toFormat);
@@ -360,17 +365,16 @@ class Helper {
     }
 
     static log(message = null, level = 'info', options = {}) {
-        const Logger = require('../utilities/Logger');
-        let loggerObj = new Logger(options);
+        const Logger = require('../Logger/Logger');
         switch (level) {
             case 'warn':
-                return loggerObj.log().warn(message);
+                return Logger.warn(message);
 
             case 'error':
-                return loggerObj.log().error(message);
+                return Logger.error(message);
 
             default:
-                return loggerObj.log().info(message);
+                return Logger.info(message);
         }
     }
 

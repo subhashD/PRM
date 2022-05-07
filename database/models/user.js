@@ -33,6 +33,14 @@ const userSchema = mongoose.Schema({
   timestamps: true
 });
 
+// Specifying a virtual with a `ref` property to enable virtual
+// population
+userSchema.virtual('contacts', {
+  ref: 'Contact',
+  localField: '_id',
+  foreignField: 'user'
+});
+
 userSchema.pre('save', function (next) {
   var user = this;
   if (this.isModified('password') || this.isNew) {

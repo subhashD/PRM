@@ -30,35 +30,36 @@ class ContactService {
    */
    create = async ( body ) => {
     try {
-        let contactToCreate = {
-            user: body.userId, 
-            firstname: body.firstname, 
-            middlename: body.middlename, 
-            lastname: body.lastname, 
-            nickname: body.nickname, 
-            description: body.description, 
-            birthdate: App.helpers.changeDateFormat(body.birthdate),
-            first_met_additional_info: body.first_met_additional_info,
-            last_consulted_at: body.last_consulted_at,
-            vcard: body.vcard,
-            emails: body.emails,
-            contacts: body.contacts 
-        };
-
-        if(body.gender) {
-          const genderResponse = await this.getGender(body.gender);
-          if(genderResponse) {
-            contactToCreate.gender = genderResponse._id;
-            contactToCreate.genderTitle = genderResponse.title;
-          }
-        }
-
-        const result = await this.repositoryInstance.create( contactToCreate );
+        const result = await this.repositoryInstance.create( body );
         // const result = true;
-        return { success: true, message:'Contact created successfully!'};
+        if(result) {
+          return { success: true, message:'Contact created successfully!'};
+        }
+        return { success: false, message:'Contact creation failed!'};
     } catch ( err ) {
         console.log(err);
-        return { success: false, message:'Contact creation failed!', data: {errors: err.message} };
+        return { success: false, message: err.name, data: {errors: err} };
+    }
+  }
+
+  /**
+   * @description Attempt to update a contact with the provided object
+   * @param contactId {ObjectId} Contact to be updated
+   * @param body {object} Object containing body fields to update contact
+   * @returns {Promise<{success: boolean, message: *, error: *}|{success: boolean, message: *, body: *}>}
+   */
+   update = async ( contactId, contactToUpdate ) => {
+    try {
+        // console.log(contactToUpdate);
+        const result = await this.repositoryInstance.update(contactId, contactToUpdate);
+        // const result = true;
+        if(result) {
+          return { success: true, message:'Contact updated successfully!'};
+        }
+        return { success: false, message:'Contact update failed!'};
+    } catch ( err ) {
+        console.log(err);
+        return { success: false, message: err.name, data: {errors: err} };
     }
   }
 
@@ -75,16 +76,77 @@ class ContactService {
         return { success: true, message:'Contacts loaded successfully!', data: result };
     } catch ( err ) {
         console.log(err);
-        return { success: false, message: err.name, data: {errors: err.message} };
+        return { success: false, message: err.name, data: {errors: err} };
     }
   }
-   
-  getById = async ( id ) => {
+  
+  /**
+   * @description Attempt to create a contact with the provided object
+   * @param contactId {objectId} fetch the given contact id
+   * create contact
+   * @returns {Promise<{success: boolean, message: *, error: *}|{success: boolean, message: *, body: *}>}
+   */
+  getById = async ( contactId ) => {
     try {  
-        const result = await this.repositoryInstance.findById( id );
+        const result = await this.repositoryInstance.findById( contactId );
         return { success: true, message:'Contact loaded successfully!', data: result };
     } catch ( err ) {
-        return { success: false, message:'Contact loading failed!', data: {errors: err.message}};
+        return { success: false, message: err.name, data: {errors: err}};
+    }
+  }
+
+  /**
+   * @description Attempt to create a contact with the provided object
+   * @param contactId {objectId} fetch the given contact id
+   * create contact
+   * @returns {Promise<{success: boolean, message: *, error: *}|{success: boolean, message: *, body: *}>}
+   */
+  deleteById = async ( contactId ) => {
+    try {  
+        const result = await this.repositoryInstance.delete( contactId );
+        if(App.lodash.isNull(result)) {
+          return { success: false, message:'Contact not found!', data: result };
+        }
+        return { success: true, message:'Contact deleted successfully!', data: result };
+    } catch ( err ) {
+      console.log(err.message);
+        return { success: false, message: err.name, data: {errors: err}};
+    }
+  }
+
+  /**
+   * @description Attempt to create a contact with the provided object
+   * @param contactId {objectId} fetch the given contact id
+   * create contact
+   * @returns {Promise<{success: boolean, message: *, error: *}|{success: boolean, message: *, body: *}>}
+   */
+   getEmailsByContactId = async ( contactId ) => {
+    try {  
+        const result = await this.repositoryInstance.findById( contactId );
+        if(!App.lodash.isEmpty(result)) {
+          return { success: true, message:'Contact`s emails loaded successfully!', data: result.emails };
+        }
+        return { success: false, message:'Contact`s emails loading failed!', data: result };
+    } catch ( err ) {
+        return { success: false, message:'Contact`s emails loading failed!', data: {errors: err}};
+    }
+  }
+  
+  /**
+   * @description Attempt to create a contact with the provided object
+   * @param contactId {objectId} fetch the given contact id
+   * create contact
+   * @returns {Promise<{success: boolean, message: *, error: *}|{success: boolean, message: *, body: *}>}
+   */
+   getNumbersByContactId = async ( contactId ) => {
+    try {  
+        const result = await this.repositoryInstance.findById( contactId );
+        if(!App.lodash.isEmpty(result)) {
+          return { success: true, message:'Contact`s numbers loaded successfully!', data: result.numbers };
+        }
+        return { success: false, message:'Contact`s numbers loading failed!', data: result };
+    } catch ( err ) {
+        return { success: false, message:'Contact`s numbers loading failed!', data: {errors: err}};
     }
   }
 }

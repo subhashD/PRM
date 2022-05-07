@@ -28,6 +28,10 @@ class ExpressLoader {
     
     //pass app to routes
     app.use(config.api.prefix, routes());
+    // handle 404 errors here
+    app.use(function (req, res, next) {
+      res.error([], 'Unable to find the requested resource!', 404);
+    });
 
     // Handling Errors (Global Handler)
     app.use(ErrorHandler);

@@ -33,21 +33,34 @@ const contactSchema = Schema({
   },
   emails: [{
       email : {
-          type: String,
-          required: true
+        type: String,
+        unique: true,
+        required: true
       },
       type: {
-          type: String
-      }
+        type: String
+      },
+      is_active: {
+        type: Boolean,
+        default: true
+      },
   }],
-  contacts: [{
+  numbers: [{
+      country_code: {
+        type: String,
+        default: "+91"
+      },
       contact : {
-          type: String,
-          required: true
+        type: String,
+        required: true
       },
       type: {
-          type: String
-      }
+        type: String
+      },
+      is_active: {
+        type: Boolean,
+        default: true
+      },
   }],
   birthdate: {
       type: Date

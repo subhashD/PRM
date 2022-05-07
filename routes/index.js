@@ -7,7 +7,7 @@ const {checkSchema} = require('express-validator');
 const validateRules = require('../requests/validateRules');
 
 // routes
-const userRoutes = require('./user');
+const userRoutes = require('./user-routes');
 const authRoutes = require('./auth-routes');
 const contactRoutes = require('./contact-routes');
 const genderRoutes = require('./gender-routes');

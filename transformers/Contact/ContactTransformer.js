@@ -1,5 +1,10 @@
+const ObjectId = require('mongoose').Types.ObjectId;
 const Transformer = require('../Transformer');
 const ContactModel = require('../../database/models/contact');
+const GenderTransformer = require('../Gender/GenderTransformer');
+const NumberTransformer = require('./NumberTransformer');
+const EmailTransformer = require('./EmailTransformer');
+const UserTransformer = require('../User/UserTransformer');
 
 class ContactTransformer extends Transformer {
 
@@ -10,13 +15,10 @@ class ContactTransformer extends Transformer {
 
     async transform(data) {
         const hasContact = App.lodash.has(data, '_id');
-        const responseData = {};
+        let responseData = {};
         
         if(hasContact) {
-            const user = data.user;
-            // const hasPhoto = App.lodash.has(user, 'profilePhoto');
-
-            const contactData = {
+            responseData = {
                 id: data._id,
                 fullname: this.getFullName(data),
                 firstname: data.firstname,
@@ -25,18 +27,29 @@ class ContactTransformer extends Transformer {
                 nickname: data.nickname,
                 description: data.description,
                 email: data.email,
-                gender: data.gender,
                 genderTitle: data.genderTitle,
                 birthdate: App.moment(data.birthdate).format('Do MMM, YYYY'),
                 first_met_additional_info: data.first_met_additional_info,
                 last_consulted_at: App.helpers.formatDate(data.last_consulted_at),
                 is_dead: data.is_dead,
-                contacts: this.showContacts(data.contacts),
-                emails: this.showEmails(data.emails),
+                numbers: await (new NumberTransformer()).getTransformedData(this.req, data.numbers),
+                emails: await (new EmailTransformer()).getTransformedData(this.req, data.emails),
 
             };
 
-            responseData.contact = contactData;
+            if(data.user instanceof ObjectId) {
+                responseData.userId = data.user;
+            } else if(App.lodash.isObject(data.user)) {
+                responseData.userId = data.user._id;
+                responseData.user = await (new UserTransformer()).getTransformedData(this.req, data.user);
+            }
+            
+            if(data.gender instanceof ObjectId) {
+                responseData.genderId = data.gender;
+            } else if(App.lodash.isObject(data.user)) {
+                responseData.genderId = data.gender._id;
+                responseData.gender = await (new GenderTransformer()).getTransformedData(this.req, data.gender);
+            }
         }
 
         return App.helpers.cloneObj(responseData);
@@ -56,32 +69,6 @@ class ContactTransformer extends Transformer {
             fullName = `${fullName} ${contact.lastname}`;
         }
         return fullName;
-    }
-
-    showContacts = (contacts) => {
-        const contactsData = [];
-        contacts.forEach(element => {
-            contactsData.push({
-                id: element._id,
-                type: element.type,
-                contact: element.contact
-            });
-        });
-        
-        return contactsData;
-    }
-    
-    showEmails = (emails) => {
-        const emailsData = [];
-        emails.forEach(element => {
-            emailsData.push({
-                id: element._id,
-                type: element.type,
-                contact: element.email
-            });
-        });
-        
-        return emailsData;
     }
 
 }

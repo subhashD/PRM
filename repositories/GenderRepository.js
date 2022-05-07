@@ -1,3 +1,4 @@
+const { result } = require("lodash");
 const GenderModel = require( "../database/models/gender" ); // Database Model
 const BaseRepository = require("./BaseRepository");
 

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const genderController = require('../controllers/GenderController');
-const genderPrefix = 'gender';
+const genderPrefix = 'genders';
 let commonMiddleware = [
 	'auth.jwt', // to check if token exists and is valid
 ]

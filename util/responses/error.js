@@ -1,11 +1,11 @@
-module.exports = function(data = {}, message = null, statusCode = 400) {
+module.exports = function(data = {}, message = null, statusCode = 400, customCode = null) {
 
     // Get access to `req` and `res`
     const req = this.req;
     const res = this.res;
 
     let responseData = {
-        code: statusCode,
+        code: (customCode) ? customCode : statusCode,
         message: message
     }
 
