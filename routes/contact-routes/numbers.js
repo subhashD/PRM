@@ -17,7 +17,7 @@ let commonMiddleware = [
 
 module.exports = {
 
-	/*<---  contact's emails routes start -->*/
+	/*<---  contact's numbers routes start -->*/
 	[`GET ${numbersPrefix}`]: {
 		action: numbersController.getNumbers,
 		name: 'contact.getNumbers',
@@ -26,7 +26,7 @@ module.exports = {
         ]
 	},
 	
-	[`GET ${numbersPrefix}/:emailId`]: {
+	[`GET ${numbersPrefix}/:numberId`]: {
 		action: numbersController.findNumber,
 		name: 'contact.findNumber',
 		middlewares: [
@@ -34,7 +34,7 @@ module.exports = {
         ]
 	},
 	
-	// for adding a single email to emails
+	// for adding a single number to numbers
 	[`POST ${numbersPrefix}/add`]: {
 		action: numbersController.addNewNumber,
 		name: 'contact.addNewNumber',
@@ -44,7 +44,7 @@ module.exports = {
 		validator: addNumberRequestInstance.getRules()
 	},
 	
-	// for adding a multiple emails to emails
+	// for adding a multiple numbers to numbers
 	[`POST ${numbersPrefix}`]: {
 		action: numbersController.pushNumbers,
 		name: 'contact.pushNumbers',
@@ -54,7 +54,7 @@ module.exports = {
 		validator: pushNumbersRequestInstance.getRules()
 	},
 
-	[`PATCH ${numbersPrefix}/:emailId`]: {
+	[`PATCH ${numbersPrefix}/:numberId`]: {
 		action: numbersController.updateNumber,
 		name: 'contact.updateNumber',
 		middlewares: [
@@ -63,13 +63,13 @@ module.exports = {
 		validator: addNumberRequestInstance.getRules(true)
 	},
 	
-	[`DELETE ${numbersPrefix}/:emailId`]: {
+	[`DELETE ${numbersPrefix}/:numberId`]: {
 		action: numbersController.deleteNumber,
 		name: 'contact.deleteNumber',
 		middlewares: [
 			...commonMiddleware,
         ]
 	},
-	/*<---  contact's emails routes start -->*/
+	/*<---  contact's numbers routes start -->*/
 
 }
