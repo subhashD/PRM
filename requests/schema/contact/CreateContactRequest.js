@@ -1,7 +1,16 @@
 var ObjectId = require('mongoose').Types.ObjectId;
 const GenderRepository = require( "../../../repositories/GenderRepository" ); // Gender Repo Layer
+const ApplicationError = require('../../../util/errors/ApplicationError');
+const PushEmailsRequest = require('./Emails/PushEmailsRequest');
+const PushNumbersRequest = require('./Numbers/PushNumbersRequest');
 
 class CreateContactRequest {
+
+    constructor () {
+        this.pushEmailsRequestInstance = new PushEmailsRequest({ optional: true }, true);
+        this.pushNumbersRequestInstance = new PushNumbersRequest({ optional: true }, true);
+    }
+
     /**
     * @description Returns the gender Id and Title
     * @param {*} id 
@@ -13,6 +22,9 @@ class CreateContactRequest {
     }
 
     getRules = () => {
+        const emailsRules = this.pushEmailsRequestInstance.getRules();
+        const numbersRules = this.pushNumbersRequestInstance.getRules();
+
         const createContactRequest = {
             firstname: {
                 notEmpty: true,
@@ -49,7 +61,9 @@ class CreateContactRequest {
                         }
                     }
                 } */
-            }
+            },
+            ...emailsRules,
+            ...numbersRules
         };
 
         return createContactRequest;
@@ -67,8 +81,6 @@ class CreateContactRequest {
             first_met_additional_info: body.first_met_additional_info,
             last_consulted_at: body.last_consulted_at,
             vcard: body.vcard,
-            emails: body.emails,
-            contacts: body.contacts 
         };
 
         if(body.gender) {
@@ -77,6 +89,16 @@ class CreateContactRequest {
             contactToCreate.gender = genderResponse._id;
             contactToCreate.genderTitle = genderResponse.title;
           }
+        }
+
+        const emailsData = await this.pushEmailsRequestInstance.getData(body);
+        if(! App.lodash.isEmpty(emailsData)) {
+            contactToCreate.emails = emailsData;
+        }
+        
+        const numbersData = await this.pushNumbersRequestInstance.getData(body);
+        if(! App.lodash.isEmpty(numbersData)) {
+            contactToCreate.numbers = numbersData;
         }
 
         return contactToCreate;

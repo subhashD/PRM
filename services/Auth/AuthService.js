@@ -1,14 +1,15 @@
-// services/AuthService.js
-const config = require('../config/index')
-const UserRepository = require( "../repositories/UserRepository" ); // Database Layer
+const BaseService = require('../BaseService');
+const config = require('../../config/index')
+const UserRepository = require( "../../repositories/UserRepository" ); // Database Layer
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-class AuthService {
+class AuthService extends BaseService {
   /**
    * @description Create an instance of AuthService
    */
   constructor () {
+    super();
     // Create instance of Data Access layer using req
     this.repositoryInstance = new UserRepository();
   }

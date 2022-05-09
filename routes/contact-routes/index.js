@@ -1,12 +1,21 @@
-const contactController = require('../controllers/ContactController');
-const CreateContactRequest = require('../requests/schema/contact/CreateContactRequest');
-const UpdateContactRequest = require('../requests/schema/contact/UpdateContactRequest');
+const contactController = require('../../controllers/Contact/ContactController');
+
+// Validator Schemas
+const CreateContactRequest = require('../../requests/schema/contact/CreateContactRequest');
+const UpdateContactRequest = require('../../requests/schema/contact/UpdateContactRequest');
+// Initiating required Requests for Rules
 const createContactRequestInstance = new CreateContactRequest();
 const updateContactRequestInstance = new UpdateContactRequest();
+
+//middleware and contact route prefix
 const contactsPrefix = 'contacts';
 let commonMiddleware = [
 	'auth.jwt', // to check if token exists and is valid
-]
+];
+
+//sub-routes
+const emailsRoutes = require('./emails');
+const numbersRoutes = require('./numbers');
 
 // router.post('/', validateRules(checkSchema(contactRequest)), contactController.create);
 
@@ -54,20 +63,12 @@ module.exports = {
         ],
 	},
 
-	[`GET ${contactsPrefix}/:contactId/emails`]: {
-		action: contactController.getEmails,
-		name: 'contact.getEmails',
-		middlewares: [
-			...commonMiddleware,
-        ]
-	},
+	/*<---  contact's emails routes start -->*/
+	...emailsRoutes,
+	/*<---  contact's emails routes start -->*/
 	
-	[`GET ${contactsPrefix}/:contactId/numbers`]: {
-		action: contactController.getNumbers,
-		name: 'contact.getNumbers',
-		middlewares: [
-			...commonMiddleware,
-        ]
-	},
-
+	/*<---  contact's numbers routes start -->*/
+	...numbersRoutes,
+	/*<---  contact's numbers routes start -->*/
+	
 }

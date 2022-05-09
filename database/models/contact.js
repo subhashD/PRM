@@ -38,7 +38,8 @@ const contactSchema = Schema({
         required: true
       },
       type: {
-        type: String
+        type: String,
+        required: true
       },
       is_active: {
         type: Boolean,

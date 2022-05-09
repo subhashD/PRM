@@ -1,6 +1,6 @@
-const GenderService = require('../services/GenderService');
+const GenderService = require('../../services/Gender/GenderService');
 const GenderServiceInstance = new GenderService();
-const GenderTransformer = require('../transformers/Gender/GenderTransformer');
+const GenderTransformer = require('../../transformers/Gender/GenderTransformer');
 
 module.exports = {
 

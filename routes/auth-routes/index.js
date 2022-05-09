@@ -1,6 +1,6 @@
-const authController = require('../controllers/AuthController');
-const registrationRequest = require('../requests/schema/registrationRequest');
-const loginRequest = require('../requests/schema/loginRequest');
+const authController = require('../../controllers/Auth/AuthController');
+const registrationRequest = require('../../requests/schema/registrationRequest');
+const loginRequest = require('../../requests/schema/loginRequest');
 const authPrefix = 'auth';
 
 // router.post('/login', validateRules(checkSchema(loginRequest)), authController.login);

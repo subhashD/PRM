@@ -1,14 +1,8 @@
-const router = require('express').Router();
-const genderController = require('../controllers/GenderController');
+const genderController = require('../../controllers/Gender/GenderController');
 const genderPrefix = 'genders';
 let commonMiddleware = [
 	'auth.jwt', // to check if token exists and is valid
 ]
-
-// router.get('/seed', genderController.seedData);
-// router.get('/', genderController.all);
-// router.get('/:id', genderController.get);
-
 
 // module.exports = router;
 

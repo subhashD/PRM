@@ -1,4 +1,4 @@
-const authController = require('../controllers/AuthController');
+const authController = require('../../controllers/Auth/AuthController');
 const userPrefix = 'user';
 let commonMiddleware = [
 	'auth.jwt', // to check if token exists and is valid

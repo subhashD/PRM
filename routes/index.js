@@ -7,10 +7,10 @@ const {checkSchema} = require('express-validator');
 const validateRules = require('../requests/validateRules');
 
 // routes
-const userRoutes = require('./user-routes');
-const authRoutes = require('./auth-routes');
-const contactRoutes = require('./contact-routes');
-const genderRoutes = require('./gender-routes');
+const authRoutes = require('./auth-routes/index');
+const userRoutes = require('./user-routes/index');
+const genderRoutes = require('./gender-routes/index');
+const contactRoutes = require('./contact-routes/index');
 
 let routes = () => {
 
@@ -26,8 +26,9 @@ let routes = () => {
     
     
         ...authRoutes,
-        ...contactRoutes,
+        ...userRoutes,
         ...genderRoutes,
+        ...contactRoutes,
     };
 
     return processRoutes(ApiRoutes, [])

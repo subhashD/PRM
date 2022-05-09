@@ -1,8 +1,8 @@
-const ApplicationError = require('../util/errors/ApplicationError');
-const AuthService = require('../services/AuthService');
+const ApplicationError = require('../../util/errors/ApplicationError');
+const AuthService = require('../../services/Auth/AuthService');
 const AuthServiceInstance = new AuthService();
-const UserTransformer = require('../transformers/User/UserTransformer');
-const LoginTransformer = require('../transformers/User/LoginTransformer');
+const UserTransformer = require('../../transformers/User/UserTransformer');
+const LoginTransformer = require('../../transformers/User/LoginTransformer');
 
 module.exports = {
 

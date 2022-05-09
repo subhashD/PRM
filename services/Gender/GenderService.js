@@ -1,11 +1,13 @@
-const GenderRepository = require( "../repositories/GenderRepository" ); // Gender Repo Layer
-const GenderSeeder = require('../database/seeders/seeds/GenderSeeder');
+const BaseService = require('../BaseService');
+const GenderRepository = require( "../../repositories/GenderRepository" ); // Gender Repo Layer
+const GenderSeeder = require('../../database/seeders/seeds/GenderSeeder');
 
-class GenderService {
+class GenderService extends BaseService {
   /**
    * @description Create an instance of MongooseService
    */
   constructor () {
+    super();
     // Create instance of Data Access layer
     this.repositoryInstance = new GenderRepository();
   }
