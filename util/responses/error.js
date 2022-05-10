@@ -10,8 +10,7 @@ module.exports = function(data = {}, message = null, statusCode = 400, customCod
             responseData.errors = data.errors;
         } else if(data.hasOwnProperty('message')) {
             responseData.errors = data.message;
-            console.log('--- in error response ---');
-            console.log(data.stack);
+            //user logger here for "data.stack"
         }
     } else if (App.lodash.isNull(data)) {
         statusCode = 404;

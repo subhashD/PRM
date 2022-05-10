@@ -5,7 +5,6 @@ module.exports = function (data = {}, message = null, statusCode = 200) {
     var res = this.res;
 
     // Log a message, if desired.
-    // console.log('Ran custom response: res.withMeta()');
 
     // If no data was provided, use res.sendStatus().
     if (App.lodash.isUndefined(data)) {
@@ -14,7 +13,6 @@ module.exports = function (data = {}, message = null, statusCode = 200) {
 
     if (App.lodash.isError(data)) {
         // If the provided data is an Error instance, then log it as verbose.
-        console.log.verbose('Custom response `res.foobar()` called with an Error:', data);
 
         // If the error doesn't have a custom .toJSON(), use its `stack` instead--
         // otherwise res.json() would turn it into an empty dictionary.

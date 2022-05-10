@@ -13,7 +13,7 @@ module.exports = {
     getNumbers: async ( req, res ) => {
         try {
             // We only pass the body object, never the req object
-            const response = await numbersServiceInstance.getNumbersByContactId( req.params.numberId );
+            const response = await numbersServiceInstance.getNumbersByContactId( req.params.contactId );
             if(response.success) {
                 const transformedData = await (new NumberTransformer()).getTransformedData(req, response.data);
                 return res.success(transformedData, response.message);

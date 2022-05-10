@@ -72,7 +72,7 @@ class AuthService extends BaseService {
 
   login = async ( body ) => {
     const user = await this.repositoryInstance.findOne({email : body.email});
-    console.log(user);
+
     if(user == null) {
         return { status: false, message: "User not found!!", data: null};
     } else {

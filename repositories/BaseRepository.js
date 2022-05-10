@@ -96,7 +96,35 @@ class BaseRepository {
      * @param {object} [options] Optional options to provide query
      * @returns {Promise} Returns the results of the query
      */
-    find ( query, projection = { __v: 0 }, sort = { id: 1 }, options = { lean: true } ) {
+    find ( query = {}, projection = { __v: 0 }, sort = { id: 1 }, options = { lean: true } ) {
+      return this.model
+        .find( query, projection, options )
+        .sort( sort )
+        .select( { __v: 0 } )
+        .exec();
+    }
+    
+    /**
+     * @description Retrieve multiple documents from the Model with the provided
+     *   query
+     * @param query {object} - Query to be performed on the Model
+     * @param populateQuery [populate] Optional: Documents to populate
+     * @param {object} [projection] Optional: Fields to return or not return from
+     * query
+     * @param {object} [sort] - Optional argument to sort data
+     * @param {object} [options] Optional options to provide query
+     * @returns {Promise} Returns the results of the query
+     */
+    findAndPopulate ( query = {}, populateQuery = [], projection = { __v: 0 }, sort = { id: 1 }, options = { lean: true } ) {
+      if(! App.lodash.isEmpty(populateQuery)) {
+        return this.model
+        .find( query, projection, options )
+        .populate(populateQuery)
+        .sort( sort )
+        .select( { __v: 0 } )
+        .exec();
+      }
+
       return this.model
         .find( query, projection, options )
         .sort( sort )
@@ -114,6 +142,31 @@ class BaseRepository {
      * @returns {Promise} Returns the results of the query
      */
     findById ( id, projection = { __v: 0 }, options = { lean: true } ) {
+      return this.model
+        .findById( id, projection, options )
+        .exec();
+    }
+
+    /**
+     * @description Retrieve a single document matching the provided ID, from the
+     *   Model
+     * @param id {string} Required: ID for the object to retrieve
+     * @param populateQuery [populate] Optional: Documents to populate
+     * @param {object} [projection] Optional: Fields to return or not return from
+     * query
+     * @param {object} [options] Optional: options to provide query
+     * @returns {Promise} Returns the results of the query
+     */
+    findByIdAndPopulate ( id, populateQuery = [], projection = { __v: 0 }, options = { lean: true } ) {
+      // var populateQuery = [{path:'user', select:['_id','email']}, {path:'gender', select:['_id','title']}];
+      
+      if(! App.lodash.isEmpty(populateQuery)) {
+        return this.model
+        .findById( id, projection, options )
+        .populate(populateQuery)
+        .exec();
+      }
+
       return this.model
         .findById( id, projection, options )
         .exec();

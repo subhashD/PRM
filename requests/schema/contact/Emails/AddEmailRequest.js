@@ -33,14 +33,14 @@ class AddEmailRequest {
             typeRule.notEmpty = true;
 
         } else {
-            // add more conditions for email field 
-            emailRule.optional = true;
-            
-            // add more conditions for type field 
-            typeRule.optional = true;
-
             let emailUniqueValidator = null;
             if(isUpdate) {
+                // add more conditions for email field 
+                emailRule.optional = true;
+                
+                // add more conditions for type field 
+                typeRule.optional = true;
+
                 emailUniqueValidator = async (email, { req }) => {
                     if(req.params.contactId && req.params.emailId){
                         const contactRepositoryInstance = new ContactRepository();
@@ -69,6 +69,12 @@ class AddEmailRequest {
                     throw Error('Not a valid request!');
                 }
             } else {
+                // add more conditions for email field 
+                emailRule.notEmpty = true;
+                
+                // add more conditions for type field 
+                typeRule.notEmpty = true;
+
                 emailUniqueValidator = async (email, { req }) => {
                     if(req.params.contactId){
                         let queryProjection = {

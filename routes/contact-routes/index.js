@@ -63,12 +63,8 @@ module.exports = {
         ],
 	},
 
-	/*<---  contact's emails routes start -->*/
 	...emailsRoutes,
-	/*<---  contact's emails routes start -->*/
 	
-	/*<---  contact's numbers routes start -->*/
 	...numbersRoutes,
-	/*<---  contact's numbers routes start -->*/
 	
 }

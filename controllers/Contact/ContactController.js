@@ -43,7 +43,7 @@ module.exports = {
         try {
             // We only pass the body object, never the req object
             const response = await ContactServiceInstance.getById( req.params.contactId );
-            console.log(response);
+
             if(response.success) {
                 const transformedData = await (new ContactTransformer()).getTransformedData(req, response.data);
                 return res.success(transformedData, response.message);

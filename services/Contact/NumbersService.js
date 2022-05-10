@@ -20,7 +20,7 @@ class NumbersService extends BaseService {
   getNumbersByContactId = async ( contactId ) => {
     try {  
         const result = await this.repositoryInstance.findById( contactId );
-        if(!App.lodash.isEmpty(result)) {
+        if(!App.lodash.isEmpty(result) && !App.lodash.isEmpty(result.numbers)) {
           return { success: true, message:'Contact`s numbers loaded successfully!', data: result.numbers };
         }
         return { success: false, message:'Contact`s numbers not found!', data: null };
@@ -98,7 +98,6 @@ class NumbersService extends BaseService {
         }
         return { success: false, message:'Numbers adding failed!'};
     } catch ( err ) {
-        console.log(err);
         return { success: false, message: err.name, data: err };
     }
   }
@@ -121,7 +120,6 @@ class NumbersService extends BaseService {
         }
         return { success: true, message:'Contact`s number deleted successfully!', data: result };
     } catch ( err ) {
-      console.log(err.message);
         return { success: false, message: err.name, data: {errors: err}};
     }
   }

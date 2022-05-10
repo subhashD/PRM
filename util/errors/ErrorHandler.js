@@ -9,9 +9,7 @@ const NotFoundError = require('./NotFoundError');
 
 module.exports = function (err, req, res, next) {
     
-    console.log('======================================================');
-    console.log(err)
-    console.log('======================================================');
+    // use logger here
 
     switch (err.constructor) {
         case InvalidSecretError:

@@ -24,7 +24,6 @@ class GenderService extends BaseService {
         const result = await this.repositoryInstance.find( filter );
         return { success: true, message:'Gender loaded successfully!', data: result };
     } catch ( err ) {
-        console.log(err);
         return { success: false, message: err.name, data: {errors: err.message} };
     }
   }

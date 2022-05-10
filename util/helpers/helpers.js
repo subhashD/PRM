@@ -73,7 +73,6 @@ class Helper {
     }
 
     static isDateValid(date, format = 'DD/MM/YYYY') {
-        console.log('in helpers : ' + App.moment(date, fromFormat).isValid());
         return App.moment(date, fromFormat).isValid();
     }
     
@@ -240,10 +239,8 @@ class Helper {
     }
 
     static spaceLog(...args) {
-
-        console.log('\n\n\n');
+        // user logger here
         args.forEach(element => console.log(element));
-        console.log('\n\n\n');
     }
 
     static getToken(req, res, key = null) {

@@ -98,7 +98,6 @@ class EmailsService extends BaseService {
         }
         return { success: false, message:'Email adding failed!'};
     } catch ( err ) {
-        console.log(err);
         return { success: false, message: err.name, data: err };
     }
   }
@@ -121,7 +120,6 @@ class EmailsService extends BaseService {
         }
         return { success: true, message:'Contact`s email deleted successfully!', data: result };
     } catch ( err ) {
-      console.log(err.message);
         return { success: false, message: err.name, data: {errors: err}};
     }
   }

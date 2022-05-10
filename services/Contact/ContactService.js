@@ -26,7 +26,6 @@ class ContactService extends BaseService {
         }
         return { success: false, message:'Contact creation failed!'};
     } catch ( err ) {
-        console.log(err);
         return { success: false, message: err.name, data: {errors: err} };
     }
   }
@@ -39,7 +38,6 @@ class ContactService extends BaseService {
    */
   update = async ( contactId, contactToUpdate ) => {
     try {
-        // console.log(contactToUpdate);
         const result = await this.repositoryInstance.update(contactId, contactToUpdate);
         // const result = true;
         if(result) {
@@ -47,7 +45,6 @@ class ContactService extends BaseService {
         }
         return { success: false, message:'Contact update failed!'};
     } catch ( err ) {
-        console.log(err);
         return { success: false, message: err.name, data: {errors: err} };
     }
   }
@@ -59,9 +56,8 @@ class ContactService extends BaseService {
    * @returns {Promise<{success: boolean, message: *, error: *}|{success: boolean, message: *, body: *}>}
    */
    getAll = async ( body ) => {
-    try {  
-        const filter = {};
-        const result = await this.repositoryInstance.find( filter );
+    try {
+        const result = await this.repositoryInstance.find();
 
         if(!App.lodash.isEmpty(result)) {
           return { success: true, message:'Contactd loaded successfully!', data: result };
@@ -69,7 +65,6 @@ class ContactService extends BaseService {
         
         return { success: false, message:'Contactd not found!', data: null };
     } catch ( err ) {
-        console.log(err);
         return { success: false, message: err.name, data: {errors: err} };
     }
   }
@@ -81,8 +76,13 @@ class ContactService extends BaseService {
    * @returns {Promise<{success: boolean, message: *, error: *}|{success: boolean, message: *, body: *}>}
    */
   getById = async ( contactId ) => {
-    try {  
-        const result = await this.repositoryInstance.findById( contactId );
+    try {
+        const populateQuery = [
+          {path:'user', select:['_id','email']}, 
+          {path:'gender', select:['_id','title']}
+        ];
+
+        const result = await this.repositoryInstance.findByIdAndPopulate( contactId, populateQuery );
         if(!App.lodash.isEmpty(result)) {
           return { success: true, message:'Contact loaded successfully!', data: result };
         }
@@ -106,7 +106,6 @@ class ContactService extends BaseService {
         }
         return { success: true, message:'Contact deleted successfully!', data: result };
     } catch ( err ) {
-      console.log(err.message);
         return { success: false, message: err.name, data: {errors: err}};
     }
   }
