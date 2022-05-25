@@ -18,12 +18,20 @@ class BaseService {
         return genderRepository.findById(id, { _id: 1, title: 1 });
     }
 
-    getSetQueryFromObject = (entityKey, objectData) => {
+    getSetQueryFromObject = (entityKey, objectData, isMultiple = true) => {
         let setQuery = {};
-        for (const [key, value] of Object.entries(objectData)) {
-            let newKey = `${entityKey}.$.${key}`;
-            setQuery[newKey] = value;
+        if(isMultiple) {
+            for (const [key, value] of Object.entries(objectData)) {
+                let newKey = `${entityKey}.$.${key}`;
+                setQuery[newKey] = value;
+            }
+        } else {
+            for (const [key, value] of Object.entries(objectData)) {
+                let newKey = `${entityKey}.${key}`;
+                setQuery[newKey] = value;
+            }
         }
+        
         return setQuery;
     }
 

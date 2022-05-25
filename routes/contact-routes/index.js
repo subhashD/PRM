@@ -16,6 +16,7 @@ let commonMiddleware = [
 //sub-routes
 const emailsRoutes = require('./emails');
 const numbersRoutes = require('./numbers');
+const introductionRoutes = require('./introduction');
 
 // router.post('/', validateRules(checkSchema(contactRequest)), contactController.create);
 
@@ -66,5 +67,7 @@ module.exports = {
 	...emailsRoutes,
 	
 	...numbersRoutes,
+
+	...introductionRoutes,
 	
 }

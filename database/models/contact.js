@@ -63,21 +63,115 @@ const contactSchema = Schema({
         default: true
       },
   }],
-  birthdate: {
-      type: Date
+  is_birthdate_known: {
+    type: Boolean,
+    default: false
   },
-  first_met_additional_info : {
-    type: String
+  birthdate_information: {
+    is_age_based: {
+      type: Boolean,
+      default: false
+    },
+    age: {
+      type: Number,
+      default: null
+    },
+    day: {
+      type: Number,
+      default: null
+    },
+    month: {
+      type: Number,
+      default: null
+    },
+    year: {
+      type: Number,
+      default: null
+    }
+  },
+  introduction : {
+    information: {
+      type: String,
+      default: null
+    },
+    first_met_at: {
+      type: String,
+      default: null
+    },
+    is_first_met_date_known: {
+      type: Boolean,
+      default: false
+    },
+    first_met_date_type: {
+      type: Number,
+      default: null
+    },
+    first_met_on: {
+      day: {
+        type: Number,
+        default: null
+      },
+      month: {
+        type: Number,
+        default: null
+      },
+      year: {
+        type: Number,
+        default: null
+      }
+    },
+    met_through_contact: {
+      type: Schema.Types.ObjectId,
+      ref: 'Contact'
+    }
   },
   last_consulted_at: { 
     type: Date 
   },
-  is_dead: {
+  is_partial: {
     type: Boolean,
     default: false
   },
+  is_active: {
+    type: Boolean,
+    default: true
+  },
+  is_starred: {
+    type: Boolean,
+    default: false
+  },
+  is_deceased: {
+    type: Boolean,
+    default: false
+  },
+  is_deceased_date_known: {
+    type: Boolean,
+    default: false
+  },
+  deceased_information: {
+    is_age_based: {
+      type: Boolean,
+      default: false
+    },
+    age: {
+      type: Number,
+      default: null
+    },
+    day: {
+      type: Number,
+      default: null
+    },
+    month: {
+      type: Number,
+      default: null
+    },
+    year: {
+      type: Number,
+      default: null
+    }
+  },
   vcard: {
-      type: String
+    type: String
   }
 }, {
   collection: 'contacts',
