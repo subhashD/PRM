@@ -38,6 +38,6 @@ module.exports = {
 			...commonMiddleware,
         ]
 	},
-	/*<---  introduction's routes start -->*/
+	/*<---  introduction's routes end -->*/
 
 }

@@ -85,6 +85,20 @@ class BaseRepository {
         .findOneAndUpdate( query, body, options )
         .exec();
     }
+    
+    /**
+     * @description Retrieve a single document from the Model with the provided
+     *   query
+     * @param query {object} Query to be performed on the Model
+     * @param body {object} Body to update the document with
+     * @param {object} [options] Optional options to provide query
+     * @returns {Promise} Returns the results of the query
+     */
+    findAndUpdateMany ( query, body, options = { returnDocument: 'after', lean: true, multi: true } ) {
+      return this.model
+        .find( query )
+        .exec();
+    }
   
     /**
      * @description Retrieve multiple documents from the Model with the provided

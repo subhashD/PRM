@@ -1,25 +1,19 @@
-const BaseSeeder = require('./BaseSeeder');
-const GenderModel = require('../../models/gender');
+const CountryModel = require('../../models/country');
 const config = require("../../../config/index");
+const seedFilesPath = require("../../seed_files/countries.json")
+const fs = require('fs');
+const path = require("path");
 
 class GenderSeeder {
     constructor() {
-        this.model = GenderModel;
+        this.model = CountryModel;
     }
 
     getSeedData = () => {
-        let seedData = [
-            {
-                title: 'Man'
-            },
-            {
-                title: 'Woman'
-            },
-            {
-                title: 'Other'
-            }
-        ]
-
+        const seedFile = path.resolve(__dirname + '../../../seed_files', 'countries.json');
+        let rawdata = fs.readFileSync(seedFile);
+        let seedData = JSON.parse(rawdata);
+        
         return seedData;
     }
 
@@ -30,7 +24,7 @@ class GenderSeeder {
             if(resultCount == seedData.length) {
                 return false;
             }
-
+            
             const response = this.model.insertMany(seedData);
             if(response) {
                 return true;
@@ -38,6 +32,7 @@ class GenderSeeder {
                 return false;
             }
         } catch (err) {
+            console.log(err.message);
             return false;
         }
     }

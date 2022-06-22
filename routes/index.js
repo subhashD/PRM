@@ -10,6 +10,7 @@ const validateRules = require('../requests/validateRules');
 const authRoutes = require('./auth-routes/index');
 const userRoutes = require('./user-routes/index');
 const genderRoutes = require('./gender-routes/index');
+const countryRoutes = require('./country-routes/index');
 const contactRoutes = require('./contact-routes/index');
 
 let routes = () => {
@@ -28,6 +29,7 @@ let routes = () => {
         ...authRoutes,
         ...userRoutes,
         ...genderRoutes,
+        ...countryRoutes,
         ...contactRoutes,
     };
 

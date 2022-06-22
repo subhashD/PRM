@@ -11,7 +11,7 @@ const pushEmailsRequestInstance = new PushEmailsRequest();
 const emailsPrefix = 'contacts/:contactId/emails';
 let commonMiddleware = [
 	'auth.jwt', // to check if token exists and is valid
-]
+];
 
 // router.post('/', validateRules(checkSchema(contactRequest)), contactController.create);
 

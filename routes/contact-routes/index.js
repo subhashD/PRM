@@ -17,6 +17,9 @@ let commonMiddleware = [
 const emailsRoutes = require('./emails');
 const numbersRoutes = require('./numbers');
 const introductionRoutes = require('./introduction');
+const workInformationRoutes = require('./work-information');
+const addressRoutes = require('./address');
+const foodRoutes = require('./food');
 
 // router.post('/', validateRules(checkSchema(contactRequest)), contactController.create);
 
@@ -69,5 +72,11 @@ module.exports = {
 	...numbersRoutes,
 
 	...introductionRoutes,
+
+	...workInformationRoutes,
+	
+	...addressRoutes,
+
+	...foodRoutes,
 	
 }
