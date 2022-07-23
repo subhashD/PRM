@@ -107,6 +107,15 @@ class AuthService extends BaseService {
         return { status: true, message: "User found!!", data: user};
     }
   }
+  
+  findUserById = async ( userId ) => {
+    const user = await this.repositoryInstance.findById(userId);
+    if(user == null) {
+        return { status: false, message: "User not found!!", data: null};
+    } else {
+        return { status: true, message: "User found!!", data: user};
+    }
+  }
 
   tokenRefresh = async ( body ) => {
     let decoded = null;

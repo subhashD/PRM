@@ -50,6 +50,17 @@ module.exports = {
             data.errors = err.message;
             res.error( data, null, 500 );
         }
-    }
+    },
+
+    get: async (req, res) => {
+        const response = await AuthServiceInstance.findUserById( req.params.userId );
+        
+        if(response.success) {
+            const transformedData = await (new UserTransformer()).getTransformedData(req, response.data);
+            
+            return res.success(transformedData, response.message);
+        }
+        return res.error( response.data, response.message );
+    },
 
 }

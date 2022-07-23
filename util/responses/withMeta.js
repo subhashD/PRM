@@ -18,7 +18,7 @@ module.exports = function (data = {}, message = null, statusCode = 200) {
         // otherwise res.json() would turn it into an empty dictionary.
         // (If this is production, don't send a response body at all.)
         if (!App.lodash.isFunction(data.toJSON)) {
-            if (process.env.NODE_ENV === 'production') {
+            if (process.env.ENV === 'production') {
                 return res.sendStatus(statusCode);
             }
             else {
