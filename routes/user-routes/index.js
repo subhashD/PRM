@@ -1,4 +1,4 @@
-const authController = require('../../controllers/Auth/AuthController');
+const userController = require('../../controllers/User/UserController');
 const userPrefix = 'user';
 let commonMiddleware = [
 	'auth.jwt', // to check if token exists and is valid
@@ -6,8 +6,8 @@ let commonMiddleware = [
 
 module.exports = {
 
-	[`GET ${userPrefix}/:userId`]: {
-		action: authController.get,
+	[`GET ${userPrefix}/profile`]: {
+		action: userController.getProfile,
 		name: 'user.get',
 		middlewares: [
             ...commonMiddleware

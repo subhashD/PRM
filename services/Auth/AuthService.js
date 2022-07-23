@@ -74,7 +74,7 @@ class AuthService extends BaseService {
     const user = await this.repositoryInstance.findOne({email : body.email});
 
     if(user == null) {
-        return { status: false, message: "User not found!!", data: null};
+        return { success: false, message: "User not found!!", data: null};
     } else {
         // check if password matches
         const validPassword = await this.isPasswordValid(user, body.password);
@@ -102,18 +102,9 @@ class AuthService extends BaseService {
   findUserByEmail = async ( email ) => {
     const user = await this.repositoryInstance.findOne({email : email});
     if(user == null) {
-        return { status: false, message: "User not found!!", data: null};
+        return { success: false, message: "User not found!!", data: null};
     } else {
-        return { status: true, message: "User found!!", data: user};
-    }
-  }
-  
-  findUserById = async ( userId ) => {
-    const user = await this.repositoryInstance.findById(userId);
-    if(user == null) {
-        return { status: false, message: "User not found!!", data: null};
-    } else {
-        return { status: true, message: "User found!!", data: user};
+        return { success: true, message: "User found!!", data: user};
     }
   }
 
@@ -123,13 +114,13 @@ class AuthService extends BaseService {
         decoded = jwt.verify(body.refreshToken, config.refreshTokenSecret);
     } catch ( err ) {
         if(err.name == 'TokenExpiredError') {
-            return { status: false, message: "Refresh Token Expired!!", data: err.message};
+            return { success: false, message: "Refresh Token Expired!!", data: err.message};
         }
     }
 
     const user = await this.repositoryInstance.findOne({email : decoded.email});
     if(user == null) {
-        return { status: false, message: "User not found!!", data: null};
+        return { success: false, message: "User not found!!", data: null};
     } else {
         let tokens = {};
 
