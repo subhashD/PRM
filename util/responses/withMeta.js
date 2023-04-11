@@ -1,40 +1,37 @@
 module.exports = function (data = {}, message = null, statusCode = 200) {
+  // Get access to `req` and `res`
+  var req = this.req
+  var res = this.res
 
-    // Get access to `req` and `res`
-    var req = this.req;
-    var res = this.res;
+  // Log a message, if desired.
 
-    // Log a message, if desired.
+  // If no data was provided, use res.sendStatus().
+  if (App.lodash.isUndefined(data)) {
+    return res.sendStatus(statusCode)
+  }
 
-    // If no data was provided, use res.sendStatus().
-    if (App.lodash.isUndefined(data)) {
-        return res.sendStatus(statusCode);
+  if (App.lodash.isError(data)) {
+    // If the provided data is an Error instance, then log it as verbose.
+
+    // If the error doesn't have a custom .toJSON(), use its `stack` instead--
+    // otherwise res.json() would turn it into an empty dictionary.
+    // (If this is production, don't send a response body at all.)
+    if (!App.lodash.isFunction(data.toJSON)) {
+      if (process.env.ENV === 'production') {
+        return res.sendStatus(statusCode)
+      } else {
+        res.status(statusCode)
+        return res.send(data.stack)
+      }
     }
+  }
 
-    if (App.lodash.isError(data)) {
-        // If the provided data is an Error instance, then log it as verbose.
-
-        // If the error doesn't have a custom .toJSON(), use its `stack` instead--
-        // otherwise res.json() would turn it into an empty dictionary.
-        // (If this is production, don't send a response body at all.)
-        if (!App.lodash.isFunction(data.toJSON)) {
-            if (process.env.ENV === 'production') {
-                return res.sendStatus(statusCode);
-            }
-            else {
-                res.status(statusCode);
-                return res.send(data.stack);
-            }
-        }
-    }
-
-    // Set status code and send response data.
-    res.status(statusCode);
-    return res.json({
-        code: statusCode,
-        message: message,
-        meta: (data.meta) ? data.meta : null,
-        data: (data.data) ? data.data : []
-    });
-
-};
+  // Set status code and send response data.
+  res.status(statusCode)
+  return res.json({
+    status: statusCode > 200 && statusCode < 300 ? true : false,
+    message: message,
+    meta: data.meta ? data.meta : null,
+    data: data.data ? data.data : [],
+  })
+}

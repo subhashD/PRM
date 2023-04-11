@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev_start": "nodemon index.js",
+    "devStart": "nodemon index.js",
     "start_local": "node -r dotenv/config index.js",
-    "test": "mocha tests/**/*Test.js",
+    "test": "mocha tests/**/*.test.js --timeout 20000 --exit",
     "lint": "eslint -c .eslintrc.json ./* --ext .js"
   },
   "author": "Subhash Diwakar",
@@ -43,10 +43,13 @@
   },
   "devDependencies": {
     "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "eslint": "^8.7.0",
     "eslint-plugin-node": "^11.1.0",
+    "faker": "^6.6.6",
     "mocha": "^9.1.4",
-    "nodemon": "^2.0.15",
+    "mongodb-memory-server": "^8.12.2",
+    "nodemon": "^2.0.21",
     "nyc": "^15.1.0"
   }
 }

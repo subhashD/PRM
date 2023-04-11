@@ -1,26 +1,23 @@
-const ApplicationError = require('./ApplicationError');
+const ApplicationError = require('./ApplicationError')
 
 class UnauthorizedError extends ApplicationError {
+  constructor(message = null, status = 401, customCode = null) {
+    super()
 
-    constructor(message = null, status = null, customCode = null) {
+    Error.captureStackTrace(this, this.constructor)
 
-        super();
-        
-        Error.captureStackTrace(this, this.constructor);
-        
-        this.name = this.constructor.name;
-        
-        this.message = "Unauthorized!";
-        
-        this.status = 401;
+    this.name = this.constructor.name
 
-        this.message = message || this.message;
-        
-        this.status = status || this.status;
+    this.message = 'Unauthorized!'
 
-        this.customCode = customCode;
+    this.status = status
 
-    }
+    this.message = message || this.message
+
+    this.status = status || this.status
+
+    this.customCode = customCode
+  }
 }
 
-module.exports = UnauthorizedError;
+module.exports = UnauthorizedError

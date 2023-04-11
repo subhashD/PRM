@@ -1,26 +1,23 @@
-const ApplicationError = require('./ApplicationError');
+const ApplicationError = require('./ApplicationError')
 
 class InvalidSecretError extends ApplicationError {
+  constructor(message = null, status = 400, customCode = null) {
+    super()
 
-    constructor(message = null, status = null, customCode = null) {
+    Error.captureStackTrace(this, this.constructor)
 
-        super();
-        
-        Error.captureStackTrace(this, this.constructor);
-        
-        this.name = this.constructor.name;
-        
-        this.message = "Invalid or no secret key found in header!";
-        
-        this.status = 400;
+    this.name = this.constructor.name
 
-        this.message = message || this.message;
-        
-        this.status = status || this.status;
+    this.message = 'Invalid or no secret key found in header!'
 
-        this.customCode = customCode;
+    this.status = status
 
-    }
+    this.message = message || this.message
+
+    this.status = status || this.status
+
+    this.customCode = customCode
+  }
 }
 
-module.exports = InvalidSecretError;
+module.exports = InvalidSecretError

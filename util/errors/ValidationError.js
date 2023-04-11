@@ -1,21 +1,21 @@
-const ApplicationError = require('./ApplicationError');
+const ApplicationError = require('./ApplicationError')
 
 class ValidationError extends ApplicationError {
+  constructor(errors = {}, message = '', status = 422, customCode = null) {
+    super(errors)
 
-	constructor(errors = {}, message = null, customCode = null) {
-		super(errors);
+    Error.captureStackTrace(this, this.constructor)
 
-		Error.captureStackTrace(this, this.constructor);
+    this.name = this.constructor.name
 
-		this.name = this.constructor.name;
+    this.message = message || 'Request contain some non-validated data.'
 
-		this.message = message || 'Request contain some non-validated data.';
+    this.errors = errors
 
-		this.errors = errors;
+    this.status = status
 
-        this.customCode = customCode;
-
-	}
+    this.customCode = customCode
+  }
 }
 
-module.exports = ValidationError;
+module.exports = ValidationError

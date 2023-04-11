@@ -1,21 +1,19 @@
-const ApplicationError = require('./ApplicationError');
+const ApplicationError = require('./ApplicationError')
 
 class ModelNotFoundError extends ApplicationError {
+  constructor(message = 'Data not found!', status = 404, customCode = null) {
+    super(message)
 
-  constructor(message = 'Data not found!', status = 400, customCode = null) {
-    super(message);
+    Error.captureStackTrace(this, this.constructor)
 
-    Error.captureStackTrace(this, this.constructor);
+    this.name = this.constructor.name
 
-    this.name = this.constructor.name;
+    this.message = message
 
-    this.message = message;
+    this.status = status
 
-    this.status = status;
-
-    this.customCode = customCode;
-
+    this.customCode = customCode
   }
 }
 
-module.exports = ModelNotFoundError;
+module.exports = ModelNotFoundError
