@@ -39,7 +39,7 @@ class ExpressLoader {
 
     if (config.env !== 'test') {
       // listen to the specific port for application
-      app.listen(config.port, () => {
+      const server = app.listen(config.port, () => {
         logger.info(`Express running, Now listening on port ${config.port}`)
       })
     }

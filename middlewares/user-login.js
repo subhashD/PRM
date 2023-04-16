@@ -1,27 +1,27 @@
-const passport = require('passport');
-const UnauthorizedError = require('../util/errors/UnauthorizedError');
+const passport = require('passport')
+const UnauthorizedError = require('../util/errors/UnauthorizedError')
 
 module.exports = function (app) {
-    
-    app.use((req, res, next) => {
-        
-        passport.authenticate('jwt', { session: false }, function (err, user, info) {
-    
-            if (err) { return next(err); }
-            
-            req['auth'] = {
-                isLoggedIn: (user) ? true : false,
-                user: (user) ? user : null,
-            };
+  app.use((req, res, next) => {
+    passport.authenticate(
+      'jwt',
+      { session: false },
+      function (err, user, info) {
+        if (err) {
+          return next(err)
+        }
 
-            if (user) {
-                req.body.userId = user._id;
-            }
+        req['auth'] = {
+          isLoggedIn: user ? true : false,
+          user: user ? user : null,
+        }
 
-            return next();
+        if (user) {
+          req.body.loggedInUserId = user._id
+        }
 
-        })(req, res, next);
-
-    });
-
+        return next()
+      }
+    )(req, res, next)
+  })
 }

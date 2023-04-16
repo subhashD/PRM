@@ -10,7 +10,7 @@ const logger = require('../Logger/Logger')
 
 module.exports = function (err, req, res, next) {
   // use logger here
-
+  console.log(err)
   switch (err.constructor) {
     case InvalidSecretError:
       return res.error(err, err.message, err.status)
@@ -40,8 +40,8 @@ module.exports = function (err, req, res, next) {
       logger.info(`${err}`)
       if (!App.env.APP_DEBUG) {
         return res.error(
-          new Error('Something went wrong, Please try again later!'),
-          '',
+          err,
+          'Something went wrong, Please try again later!',
           500
         )
       }

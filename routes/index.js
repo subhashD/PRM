@@ -12,6 +12,7 @@ const userRoutes = require('./user-routes/index')
 const genderRoutes = require('./gender-routes/index')
 const countryRoutes = require('./country-routes/index')
 const contactRoutes = require('./contact-routes/index')
+const chatRoutes = require('./chat-routes/index')
 
 let routes = () => {
   const ApiRoutes = {
@@ -29,6 +30,7 @@ let routes = () => {
     ...genderRoutes,
     ...countryRoutes,
     ...contactRoutes,
+    ...chatRoutes,
   }
 
   return processRoutes(ApiRoutes, [])
