@@ -17,7 +17,7 @@ module.exports = function (app) {
         }
 
         if (user) {
-          req.body.loggedInUserId = user._id
+          req.body.loggedInUserId = user._id.toString()
         }
 
         return next()

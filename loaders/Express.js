@@ -7,6 +7,7 @@ const path = require('path')
 const middlewares = require('../middlewares/index')
 const globals = require('../config/globals')
 const ErrorHandler = require('../util/errors/ErrorHandler')
+const socketHandler = require('../util/socket/socketHandler')
 
 class ExpressLoader {
   constructor() {
@@ -39,9 +40,11 @@ class ExpressLoader {
 
     if (config.env !== 'test') {
       // listen to the specific port for application
-      const server = app.listen(config.port, () => {
+      const httpServer = app.listen(config.port, () => {
         logger.info(`Express running, Now listening on port ${config.port}`)
       })
+
+      socketHandler(httpServer) // here we will handle all the connections and emits related to socket
     }
   }
 

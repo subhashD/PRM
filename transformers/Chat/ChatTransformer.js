@@ -47,8 +47,15 @@ class ChatTransformer extends Transformer {
     if (chat.isGroupChat) {
       return chat.chatName
     }
-    const chatUsers = chat.users[0]
-    return this.getUserFullName(chatUsers)
+    let chatUser = null
+    const loggedInUserId = String(this.req.body.loggedInUserId)
+    chat.users.forEach(function (u) {
+      if (String(u._id) != loggedInUserId) {
+        chatUser = u
+      }
+    })
+
+    return chatUser ? this.getUserFullName(chatUser) : null
   }
 
   getUserFullName(user) {

@@ -9,6 +9,7 @@ if (process.env.NODE_ENV == 'dev') {
   DBURL = process.env.DBURL
 }
 const config = {
+  clientUrl: process.env.CLIENT_URL || 'http://localhost:3000',
   /**
    * Your favorite port for running express
    */

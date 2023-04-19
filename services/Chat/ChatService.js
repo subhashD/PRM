@@ -1,6 +1,7 @@
 const BaseService = require('../BaseService')
 const config = require('../../config/index')
 const ChatRepository = require('../../repositories/ChatRepository') // Chat Database Layer
+const mongoose = require('mongoose')
 
 class ChatService extends BaseService {
   /**
@@ -23,8 +24,8 @@ class ChatService extends BaseService {
       const findQuery = {
         isGroupChat: false,
         $and: [
-          { $users: { $elemMatch: { $eq: body.loggedInUserId } } },
-          { $users: { $elemMatch: { $eq: body.userId } } },
+          { users: { $elemMatch: { $eq: body.userId } } },
+          { users: { $elemMatch: { $eq: body.loggedInUserId } } },
         ],
       }
       const isChat = await this.repositoryInstance.findOneAndPopulate(
